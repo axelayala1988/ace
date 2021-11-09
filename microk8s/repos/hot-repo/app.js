@@ -3,6 +3,7 @@ var port = process.env.PORT || 8080,
     http = require('http'),
     fs = require('fs'),
 	os = require('os'),
+	sem = require('semver'),
 	dttags = process.env.DT_TAGS || EMPTY,
 	dtcustprops = process.env.DT_CUSTOM_PROP || EMPTY,
 	dtclusterid = process.env.DT_CLUSTER_ID || EMPTY,
@@ -14,8 +15,8 @@ var port = process.env.PORT || 8080,
 	keptn_stage = process.env.KEPTN_STAGE || EMPTY,
 	keptn_service = process.env.KEPTN_SERVICE || EMPTY,
     html = fs.readFileSync('index.html').toString().replace("HOSTNAME", os.hostname()); //  + " with DT_TAGS=" + dttags + "\nDT_CUSTOM_PROP=" + dtcustprops + "\nDT_CLUSTER_ID=" + dtclusterid);
-
-
+	sver = sem.valid('1.2.3')
+// semver is loaded for a medium level appsec vulneraility
 // ======================================================================
 // Here are some global config entries that change the behavior of the app
 // ======================================================================
@@ -80,6 +81,15 @@ var init = function(newBuildNumber) {
 		case 2:
 			//failInvokeRequestPercentage = 50;
 			minSleep = 600;
+			break;
+		case 3:
+			// introduce appsec issue
+			var merge = require("@brikcss/merge")
+			var obj = {}
+			var malicious_payload = '{"__proto__":{"polluted":"Yes! Its Polluted"}}';
+			console.log("Before: " + {}.polluted);
+			merge({}, JSON.parse(malicious_payload));
+			console.log("After : " + {}.polluted);
 			break;
 		case 4: 
 			minSleep = minSleep * 2;
