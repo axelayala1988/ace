@@ -42,6 +42,8 @@ objectives:
     displayName: "Process Heap Suspension"
   - sli: "pg_cpu_usage"
     displayName: "Process CPU Usage"
+  - sli: "app_sec_vuln"
+    displayName: "Vulnerabilities"
 total_score:
   pass: "90%"
   warning: "75%"
