@@ -24,6 +24,7 @@
     dynatrace_tenant_url:             "{{ dynatrace['tenant'] }}" 
     dynatrace_paas_token:             "{{ dynatrace['paastoken'] }}"
     dynatrace_api_token:              "{{ dynatrace['apitoken'] }}"
+    dynatrace_operator_version:       "{{ acebox['config']['dynatrace']['operator_version'] | default('v0.3.0') }}"
     jenkins_setcreds:                 "{{ acebox['config']['jenkins']['setcreds'] | default(true) }}"
     jenkins_helm_chart_version:       "{{ acebox['config']['jenkins']['helm_chart_version'] | default('3.3.18') }}"
     jenkins_version:                  "{{ acebox['config']['jenkins']['version'] | default('2.277.4') }}"
