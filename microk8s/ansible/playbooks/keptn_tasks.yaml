@@ -74,7 +74,7 @@
 
 - name: Keptn - Install Dynatrace service
   become_user: "{{ non_root_user }}"
-  shell: helm upgrade --install dynatrace-service -n keptn https://github.com/keptn-contrib/dynatrace-service/releases/download/{{ keptn_dynatrace_service_version }}/dynatrace-service-{{ keptn_dynatrace_service_version }}.tgz
+  shell: helm upgrade --install dynatrace-service -n keptn https://github.com/keptn-contrib/dynatrace-service/releases/download/{{ keptn_dynatrace_service_version }}/dynatrace-service-{{ keptn_dynatrace_service_version }}.tgz --set dynatraceService.image.tag={{ keptn_dynatrace_service_version }}
 
 - name: Keptn - Install JMeter service
   become_user: "{{ non_root_user }}"
