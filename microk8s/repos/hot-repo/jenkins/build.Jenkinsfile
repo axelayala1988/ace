@@ -1,6 +1,6 @@
 pipeline {
     parameters {
-        choice(name: 'BUILD', choices: ['1','2','3','4'], description: 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
+        choice(name: 'BUILD', choices: ['1','2','3','4','5'], description: 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
     }
     environment {
         APP_NAME = "simplenodeservice"
