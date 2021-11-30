@@ -26,8 +26,9 @@ The app also comes with 4 built-in "build number" behaviors - meaning - if you l
 | ----- | --------- |
 |1|Everything good |
 |2|Slow down introduced |
-|3|Performance good, high level vulnerability included|
+|3|Everything good|
 |4|20% Failure Rate of /api/invoke and twice as slow when running in production mode|
+|5|Performance good, introduce Application Security Vulnerability |
 
 Every build shows the build number and has its own color:
 ![](images/4buildoverview.png)
