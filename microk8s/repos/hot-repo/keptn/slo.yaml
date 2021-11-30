@@ -42,8 +42,30 @@ objectives:
     displayName: "Process Heap Suspension"
   - sli: "pg_cpu_usage"
     displayName: "Process CPU Usage"
-  - sli: "app_sec_vuln"
-    displayName: "Vulnerabilities"
+  - sli: "app_sec_high"
+    displayName: "Security Vulnerabilities - High"
+    pass:
+    - criteria:
+      - <=0
+    key_sli: true
+  - sli: "app_sec_critical"
+    displayName: "Security Vulnerabilities - Critical"
+    pass:
+    - criteria:
+      - <=0
+    key_sli: true
+  - sli: "app_sec_medium"
+    displayName: "Security Vulnerabilities - Medium"
+    key_sli: false
+    pass:
+    - criteria:
+      - <=+2
+  - sli: "app_sec_low"
+    displayName: "Security Vulnerabilities - Low"
+    key_sli: false
+    pass:
+    - criteria:
+      - <=+2
 total_score:
   pass: "90%"
   warning: "75%"
