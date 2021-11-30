@@ -82,7 +82,13 @@ var init = function(newBuildNumber) {
 			//failInvokeRequestPercentage = 50;
 			minSleep = 600;
 			break;
-		case 3:
+		case 4: 
+			minSleep = minSleep * 2;
+			if(inProduction) {
+				failInvokeRequestPercentage = 20;
+			}
+			break;
+		case 5:
 			// introduce appsec issue
 			var merge = require("@brikcss/merge")
 			var obj = {}
@@ -90,12 +96,6 @@ var init = function(newBuildNumber) {
 			console.log("Before: " + {}.polluted);
 			merge({}, JSON.parse(malicious_payload));
 			console.log("After : " + {}.polluted);
-			break;
-		case 4: 
-			minSleep = minSleep * 2;
-			if(inProduction) {
-				failInvokeRequestPercentage = 20;
-			}
 			break;
 		default:
 			// everything normal here
