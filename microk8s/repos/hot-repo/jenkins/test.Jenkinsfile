@@ -39,11 +39,27 @@ pipeline {
         label 'kubegit'
     }
     stages {
+        stage('Update spec') {
+            steps {
+                container('git') {
+                    withCredentials([usernamePassword(credentialsId: 'git-creds-ace', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh "git config --global user.email ${env.GITHUB_USER_EMAIL}"
+                        sh "git clone ${env.GIT_PROTOCOL}://${GIT_USERNAME}:${GIT_PASSWORD}@${env.GIT_DOMAIN}/${env.GITHUB_ORGANIZATION}/${env.GIT_REPO}"
+                        sh "cd ${env.GIT_REPO}/ && sed -e 's|APP_BUILD_VERSION_PLACEHOLDER|${env.ART_VERSION}|' keptn/sli.yaml > keptn/sli_gen.yaml"
+                        sh "cd ${env.GIT_REPO}/ && git add keptn/sli_gen.yaml && git commit -m 'Update slo for appsec'"
+                        sh "cd ${env.GIT_REPO}/ && git push ${env.GIT_PROTOCOL}://${GIT_USERNAME}:${GIT_PASSWORD}@${env.GIT_DOMAIN}/${env.GITHUB_ORGANIZATION}/${env.GIT_REPO}"
+                        //sh "rm -rf ${env.GIT_REPO}"
+                    }
+                }
+            }
+        }    
         stage ('Keptn Init') {
             steps {
+                checkout scm
                 script {
                     keptn.keptnInit project:"${env.PROJECT}", service:"${env.APP_NAME}", stage:"${env.ENVIRONMENT}", monitoring:"${env.MONITORING}" , shipyard:'keptn/shipyard.yaml'
-                    keptn.keptnAddResources('keptn/sli.yaml','dynatrace/sli.yaml')
+                    readFile('keptn/sli_gen.yaml')
+                    keptn.keptnAddResources('keptn/sli_gen.yaml','dynatrace/sli.yaml')
                     keptn.keptnAddResources('keptn/slo.yaml','slo.yaml')
                     keptn.keptnAddResources('keptn/dynatrace.conf.yaml','dynatrace/dynatrace.conf.yaml')
                 }
@@ -115,6 +131,12 @@ pipeline {
         stage('Keptn Evaluation') {
             steps {
                 script {
+                    //introduce slowdown for appsec vulnerability detection of build 5
+                    switch(BUILD) {
+                        case "5": 
+                            sleep(time:600,unit:"SECONDS")
+                            break;
+                    }
                     def labels=[:]
                     labels.put("DT_APPLICATION_RELEASE_VERSION", "${env.BUILD}.0.0")
                     labels.put("DT_APPLICATION_BUILD_VERSION", "${env.ART_VERSION}")

@@ -589,7 +589,7 @@ controller:
           - script: >
               pipelineJob('ace-demo/1. Build') {
                 parameters {
-                  choiceParam('BUILD', ['1','2','3','4'], 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
+                  choiceParam('BUILD', ['1','2','3','4','5'], 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
                 }
                 definition {
                   cpsScm {
