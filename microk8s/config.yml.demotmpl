@@ -13,6 +13,7 @@ acebox:
   config:
     git:
     keptn:
+    dynatrace:
     jenkins:
     activegate:
     microk8s:
