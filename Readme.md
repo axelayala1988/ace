@@ -42,13 +42,14 @@ ACE-BOX comes with the following components
 
 | Component | Version |
 |----|-------|
-| microk8s | 1.18 |
-| jenkins | lts (222.4 at time of writing) |
+| microk8s | 1.23 |
+| jenkins | lts (2.319.1-lts at time of writing) |
 | helm | 3 |
 | oneagent | latest |
 | activegate for private synthetic node | latest |
 | ace dashboard | built on the spot |
-| gitea local git server | 1.11.6 |
+| gitea local git server | 1.14.6 |
+| keptn | 0.11.2 |
 
 
 ## Installation

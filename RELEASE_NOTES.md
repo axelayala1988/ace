@@ -1,5 +1,72 @@
 # ACE-BOX Release notes
 
+## v1.10.0 - January 2022
+
+### New Features
+
+#### AppSec Quality Gate / Security Gate
+A new pipeline set has been integrate to demonstrate AppSec Quality Gates!
+[#116](https://github.com/Dynatrace/ace-box/issues/116)
+
+#### Provisioning improvements
+Improvements in provisioning and updating ace-box instances.
+[#58](https://github.com/Dynatrace/ace-box/issues/58)
+
+In a nutshell:
+
+- Unified provisioning: Terraform for cloud + Vagrant instances (Vagrant legacy can be used as well)
+- Ansible cleanup: Move playbooks and related config (e.g. variables) into roles
+- Installation: install.sh is split into:
+   - init.sh: runs some essentials (e.g. apt-get update, install Ansible, ... + "ace-cli"). This usually needs to be run once for every ACE-box and is included in the Terraform provisioners.
+   - "$ ace prepare": Adds VM specific settings (e.g. ingress domain). This usually needs to be run once for every ACE-box and is included in the Terraform provisioners.
+   - "$ ace install ": Installs ACE-Box components, e.g. "all", "microk8s", ...
+Please see the README for additional info.
+
+#### Documentation updates
+monaco-gitops-demo usecase documentation
+[#95](https://github.com/Dynatrace/ace-box/issues/95)
+
+First build might see quality gate evaluation fail due to tag propagation timing issue
+[#96](https://github.com/Dynatrace/ace-box/issues/96)
+
+### Fixes/tech updates
+Stability issues with longer running ace-box instances fixed by updating microk8s and installing `iptables-persistent` package
+[#124](https://github.com/Dynatrace/ace-box/issues/124)
+
+Keptn update to 0.11.2
+[#109](https://github.com/Dynatrace/ace-box/issues/109)
+
+Jenkins update to 2.319.1-lets
+[#120](https://github.com/Dynatrace/ace-box/issues/120)
+
+
+## v1.9.5 - November 2021
+
+There are no new features in this release, only targetting fixes and imporovements
+### Fixes/tech updates
+
+#### Keptn 0.10.0 Update and support proper merging of metrics
+Update to latest version of Keptn and Dynatrace Service for Keptn
+[#86](https://github.com/Dynatrace/ace-box/issues/86)
+[#81](https://github.com/Dynatrace/ace-box/issues/81)
+#### Dynatrace Operator
+The Operator install script was intermittently failing. Went back to manual install.
+[#70](https://github.com/Dynatrace/ace-box/issues/70)
+
+#### GCP Terraform requires sourcerange firewall
+Library update
+[#88](https://github.com/Dynatrace/ace-box/pull/88)
+
+#### Dashboard deployed from image registry
+Speeds up deployment
+[#32](https://github.com/Dynatrace/ace-box/discussions/32)
+#### Various
+Monaco failure 
+[#77](https://github.com/Dynatrace/ace-box/issues/77)
+
+Gitea login enforced 
+[#60](https://github.com/Dynatrace/ace-box/issues/60)
+
 ## v1.9 - July 2021
 
 ### New Features
