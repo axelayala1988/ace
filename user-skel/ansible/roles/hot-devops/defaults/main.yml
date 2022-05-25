@@ -1,0 +1,10 @@
+---
+demo_appsec_source_repo: "/home/{{ ace_box_user }}/repos/ace"
+demo_appsec_org: "demo"
+demo_appsec_repo_name: "ace"
+hot_devops_simplenode_source_repo: "/home/{{ ace_box_user }}/repos/hot/hot-devops/simplenode"
+hot_devops_simplenode_org: "hot"
+hot_devops_simplenode_repo_name: "simplenodeservice"
+hot_devops_source_repo: "/home/{{ ace_box_user }}/repos/hot/hot-devops/hot"
+hot_devops_org: "hot"
+hot_devops_repo_name: "hot-devops"

@@ -62,6 +62,19 @@
   - hot_appsec
   - never
 
+- name: Enable "hot_devops"
+  include_tasks: set-var.yml
+  vars:
+  - var_key_to_set: "hot_devops"
+  - var_value_to_set: "{{ not is_unconfig }}"
+  args:
+    apply:
+      tags:
+        - hot_devops
+  tags:
+  - hot_devops
+  - never
+  
 # - name: Enable "monaco_gitops"
 #   include_tasks: set-var.yml
 #   vars:

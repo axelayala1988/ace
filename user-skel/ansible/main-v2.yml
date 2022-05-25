@@ -35,6 +35,12 @@
     - hot_appsec
     - never
 
+  # Use case - DevOps HOT
+  - role: hot-devops
+    tags:
+    - hot_devops
+    - never
+
   # Use case - Monaco GitOps hands-on training
   # - role: hot-monaco-gitops
   #   tags:
