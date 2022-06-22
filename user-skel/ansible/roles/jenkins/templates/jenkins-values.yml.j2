@@ -213,3 +213,8 @@ controller:
       hot-appsec-jobs-config: |
 {% include 'hot-appsec-jobs.yml.j2' %}
 {% endif %}
+{% if hot_monaco|default(False) == True %}
+
+      hot-monaco-gitops-jobs-config: |
+{% include 'hot-monaco-gitops-jobs.yml.j2' %}
+{% endif %}
