@@ -28,6 +28,9 @@
     create_namespace: true
     wait: true
     wait_timeout: 15m
+    values:
+      continuous-delivery:
+        enabled: true
   register: keptn_helm_chart
 
 - name: Template ingress file

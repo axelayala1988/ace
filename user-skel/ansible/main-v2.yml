@@ -35,6 +35,12 @@
     - hot_appsec
     - never
 
+  # Use case - Demo Synthetic on demand
+  - role: demo-synthetic
+    tags:
+    - demo_synthetic
+    - never
+
   # Use case - Monaco GitOps hands-on training
   # - role: hot-monaco-gitops
   #   tags:
