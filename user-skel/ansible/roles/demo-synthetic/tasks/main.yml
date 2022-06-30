@@ -81,7 +81,7 @@
 
     # keptn trigger delivery --project=demo-synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
 
-- include_role:
-    name: dashboard
-  vars:
-    dashboard_ingress_class: istio
+# - include_role:
+#     name: dashboard
+#   vars:
+#     dashboard_ingress_class: istio
