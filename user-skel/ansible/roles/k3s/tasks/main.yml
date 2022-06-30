@@ -11,6 +11,10 @@
       timeout: 300
   - name: Run k3s installer
     ansible.builtin.command: "/tmp/k3s_install.sh --disable traefik --write-kubeconfig-mode=644"
+    register: k3s_install_result
+    retries: 3
+    delay: 10
+    until: k3s_install_result is not failed
 
 # Install helm via snap
 - name: Install Helm
