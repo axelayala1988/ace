@@ -1,0 +1,65 @@
+---
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: istio
+    repo_url: https://istio-release.storage.googleapis.com/charts
+
+- name: Install Istio base
+  kubernetes.core.helm:
+    name: istio-base
+    chart_ref: istio/base
+    chart_version: "1.14.1"
+    release_namespace: "{{ istio_system_namespace }}"
+    create_namespace: true
+    wait: true
+    wait_timeout: 15m
+
+- name: Install Istiod
+  kubernetes.core.helm:
+    name: istiod
+    chart_ref: istio/istiod
+    chart_version: "1.14.1"
+    release_namespace: "{{ istio_system_namespace }}"
+    create_namespace: true
+    wait: true
+    wait_timeout: 15m
+
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ istio_ingress_namespace }}"
+        labels:
+          istio-injection: enabled
+
+- name: Install Istio gateway
+  kubernetes.core.helm:
+    name: istio-ingress
+    chart_ref: istio/gateway
+    chart_version: "1.14.1"
+    release_namespace: "{{ istio_ingress_namespace }}"
+    wait: true
+    wait_timeout: 15m
+
+- name: Create Istio default gateway
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: networking.istio.io/v1alpha3
+      kind: Gateway
+      metadata:
+        name: "{{ istio_ingress_gateway }}"
+        namespace: "{{ istio_ingress_namespace }}"
+      spec:
+        selector:
+          istio: ingress
+        servers:
+        - port:
+            number: 80
+            name: http
+            protocol: HTTP
+          hosts:
+          - "*"

@@ -3,4 +3,5 @@ keptn_version: "0.13.4"
 keptn_dynatrace_service_version: "0.21.0"
 keptn_namespace: "keptn"
 keptn_ingress_domain: "keptn.{{ ingress_domain }}"
+keptn_ingress_class: public
 keptn_cli_download_location: "/tmp/keptn"

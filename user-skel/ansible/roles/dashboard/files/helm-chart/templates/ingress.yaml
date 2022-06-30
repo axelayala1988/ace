@@ -1,3 +1,5 @@
+{{ if .Values.ingress.enabled }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -27,3 +29,33 @@ spec:
               number: 80
         path: /
         pathType: ImplementationSpecific
+{{ else if .Values.virtualservice.enabled }}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  annotations:
+    meta.helm.sh/release-name: {{ .Chart.Name }}
+    meta.helm.sh/release-namespace: ace
+    # nginx.ingress.kubernetes.io/auth-type: basic
+    # nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    # nginx.ingress.kubernetes.io/auth-realm: dashboard
+  labels:
+    app: {{ .Chart.Name }}
+    app.kubernetes.io/managed-by: Helm
+    chart: {{ .Chart.Name }}
+    heritage: Helm
+    release: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}
+spec:
+  hosts:
+  - "dash.{{ .Values.domain }}"
+  gateways:
+  - "istio-ingress/default-gateway"
+  http:
+  - route:
+    - destination:
+        host: {{ .Chart.Name }}
+        port:
+          number: 80
+{{ end }}

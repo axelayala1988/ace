@@ -1,0 +1,4 @@
+---
+istio_system_namespace: istio-system
+istio_ingress_namespace: istio-ingress
+istio_ingress_gateway: default-gateway

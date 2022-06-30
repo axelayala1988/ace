@@ -1,0 +1,44 @@
+---
+- name: Install k3s
+  block:
+  - name: Download k3s installer
+    # become: true
+    # become_user: root
+    get_url:
+      url: "https://get.k3s.io"
+      dest: "/tmp/k3s_install.sh"
+      mode: +x
+      timeout: 300
+  - name: Run k3s installer
+    ansible.builtin.command: "/tmp/k3s_install.sh --disable traefik --write-kubeconfig-mode=644"
+
+# Install helm via snap
+- name: Install Helm
+  become: true
+  become_user: root
+  community.general.snap:
+    name:
+    - helm
+    classic: yes
+
+# Required for Ansible k8s tasks
+- name: Install kubernetes package
+  pip:
+    name: kubernetes
+
+- name: Persist kube config
+  block:
+  - ansible.builtin.file:
+      path: /home/{{ ace_box_user }}/.kube
+      state: directory
+      mode: '0700'
+  - become: true
+    become_user: root
+    shell: k3s kubectl config view --raw > /home/{{ ace_box_user }}/.kube/config
+  - ansible.builtin.file:
+      path: /home/{{ ace_box_user }}/.kube/config
+      owner: "{{ ace_box_user }}"
+      group: "{{ ace_box_user }}"
+      mode: '0600'
+    become: true
+    become_user: root

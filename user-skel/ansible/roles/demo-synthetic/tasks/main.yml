@@ -8,26 +8,37 @@
     var_value_to_set: true
 
 - include_role:
-    name: microk8s
+    name: k3s
+
+- include_role:
+    name: istio
 
 - include_role:
     name: dt-oneagent
 
-- include_role:
-    name: monaco
+# - include_role:
+#     name: monaco
 
-- include_role:
-    name: monaco
-    tasks_from: dt-cleanup
+# - include_role:
+#     name: monaco
+#     tasks_from: dt-cleanup
+
+# rm simplenodeservice.tgz && tar -cvzf simplenodeservice.tgz simplenodeservice
+
+# keptn add-resource --project=synthetic-on-demand --service=simplenodeservice --all-stages --resource=/home/ace/ansible/roles/demo-synthetic/files/helm/simplenodeservice.tgz --resourceUri=helm/simplenodeservice.tgz
+# keptn trigger delivery --project=synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
 
 - include_role:
     name: keptn
   vars:
     keptn_version: "0.16.0"
     keptn_dynatrace_service_version: "0.22.0"
+    keptn_ingress_class: istio
 
 - include_role:
     name: gitea
+  vars:
+    gitea_ingress_class: istio
 
 - include_role:
     name: gitea
@@ -47,5 +58,30 @@
     gitea_org: "demo"
     gitea_repo: "synthetic-on-demand"
 
+- name: Prepare CA use case
+  block:
+  - name: Create Project
+    ansible.builtin.command: "keptn create project demo-synthetic-on-demand --shipyard={{ role_path }}/files/shipyard.yaml --git-user={{ gitea_username }} --git-token={{ gitea_access_token }} --git-remote-url={{ gitea_internal_endpoint }}/demo/synthetic-on-demand.git"
+    ignore_errors: true
+  - name: Create Service
+    ansible.builtin.command: "keptn create service simplenodeservice --project=demo-synthetic-on-demand"
+    ignore_errors: true
+  - name: Upload Delivery Helm Chart
+    ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/helm/simplenodeservice.tgz --resourceUri=helm/simplenodeservice.tgz"
+    ignore_errors: true
+  # - name: Create Dynatrace secret
+  #   ansible.builtin.command: "keptn create secret dynatrace --scope=dynatrace-service --from-literal=DT_TENANT={{ dynatrace_tenant_url }} --from-literal=DT_API_TOKEN={{ dynatrace_api_token }}"
+  #   ignore_errors: true
+  - name: Upload dynatrace.conf.yaml
+    ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --resource={{ role_path }}/files/dynatrace.conf.yaml --resourceUri=dynatrace/dynatrace.conf.yaml"
+    ignore_errors: true
+  - name: Configure Dynatrace monitoring
+    ansible.builtin.command: "keptn configure monitoring dynatrace --project=demo-synthetic-on-demand"
+    ignore_errors: true
+
+    # keptn trigger delivery --project=demo-synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
+
 - include_role:
     name: dashboard
+  vars:
+    dashboard_ingress_class: istio

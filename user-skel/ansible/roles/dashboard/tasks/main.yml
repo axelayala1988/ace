@@ -84,6 +84,8 @@
     --set env.CLOUD_AUTOMATION_BRIDGE_URL={{ cloud_automation_bridge | default(None) }}
     --set env.QUALITY_GATES_PROVIDER={{ cloud_automation_flavor | default(None) }}
     --set env.K8S_PROVIDER=MICROK8S
+    --set ingress.enabled={{ dashboard_ingress_class != "istio" }}
+    --set virtualservice.enabled={{ dashboard_ingress_class == "istio" }}
 
 - name: Print some dashboard config
   debug:
