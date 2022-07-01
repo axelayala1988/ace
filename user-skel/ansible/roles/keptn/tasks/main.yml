@@ -29,6 +29,9 @@
     wait: true
     wait_timeout: 15m
     values:
+      control-plane:
+        bridge:
+          lookAndFeelUrl: "{{ keptn_look_and_feel_url }}"
       continuous-delivery:
         enabled: true
         ingressConfig:
@@ -49,7 +52,7 @@
       src: /tmp/keptn-ingress.yml
       namespace: "{{ keptn_namespace }}"
     register: keptn_ingress
-  when: keptn_ingress_class != "istio"
+  when: ingress_class != "istio"
 
 - name: Create VirtualService
   kubernetes.core.k8s:
@@ -71,7 +74,7 @@
               host: api-gateway-nginx
               port:
                 number: 80
-  when: keptn_ingress_class == "istio"
+  when: ingress_class == "istio"
 
 - name: Keptn - Source Keptn secrets
   include: roles/keptn/tasks/source-secret.yml
@@ -83,11 +86,25 @@
   shell: "/usr/local/bin/keptn auth --api-token {{ keptn_api_token }} --endpoint {{ keptn_internal_endpoint }}"
   when: keptn_helm_chart.changed or keptn_ingress.changed
 
-# - name: Keptn - Install JMeter service
-#   include: roles/keptn/tasks/jmeter-service.yml
+- name: Keptn - Install JMeter service
+  include: roles/keptn/tasks/jmeter-service.yml
+  when: keptn_jmeter_service_enabled
 
 - name: Keptn - Install Dynatrace service
   include: roles/keptn/tasks/dynatrace-service.yml
 
 - name: Keptn - Install Helm service
   include: roles/keptn/tasks/helm-service.yml
+  when: keptn_helm_service_enabled
+
+- name: Keptn - Install Synthetic service
+  include: roles/keptn/tasks/synthetic-service.yml
+  when: keptn_synthetic_service_enabled
+
+- name: Keptn - Install Collector service
+  include: roles/keptn/tasks/collector-service.yml
+  when: keptn_test_collector_service_enabled
+
+- name: Keptn - Install Job Executor service
+  include: roles/keptn/tasks/job-executor-service.yml
+  when: keptn_job_executor_service_enabled

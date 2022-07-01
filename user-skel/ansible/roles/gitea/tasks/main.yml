@@ -54,7 +54,7 @@
               host: gitea-http
               port:
                 number: 3000
-  when: gitea_ingress_class == "istio"
+  when: ingress_class == "istio"
 
 - name: Source endpoints
   include: roles/gitea/tasks/source-endpoints.yml

@@ -7,6 +7,14 @@
     var_key_to_set: "demo_synthetic"
     var_value_to_set: true
 
+- name: Set "ingress_class"
+  include_role:
+    name: config-v2
+    tasks_from: set-var
+  vars:
+    var_key_to_set: "ingress_class"
+    var_value_to_set: "istio"
+
 - include_role:
     name: k3s
 
@@ -16,29 +24,20 @@
 - include_role:
     name: dt-oneagent
 
-# - include_role:
-#     name: monaco
-
-# - include_role:
-#     name: monaco
-#     tasks_from: dt-cleanup
-
-# rm simplenodeservice.tgz && tar -cvzf simplenodeservice.tgz simplenodeservice
-
-# keptn add-resource --project=synthetic-on-demand --service=simplenodeservice --all-stages --resource=/home/ace/ansible/roles/demo-synthetic/files/helm/simplenodeservice.tgz --resourceUri=helm/simplenodeservice.tgz
-# keptn trigger delivery --project=synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
-
 - include_role:
     name: keptn
   vars:
     keptn_version: "0.16.0"
     keptn_dynatrace_service_version: "0.22.0"
-    keptn_ingress_class: istio
+    keptn_jmeter_service_enabled: false
+    keptn_helm_service_enabled: true
+    keptn_synthetic_service_enabled: true
+    keptn_test_collector_service_enabled: true
+    keptn_job_executor_service_enabled: true
+    keptn_job_executor_service_subscriptions: "sh.keptn.event.test.triggered"
 
 - include_role:
     name: gitea
-  vars:
-    gitea_ingress_class: istio
 
 - include_role:
     name: gitea
@@ -69,19 +68,21 @@
   - name: Upload Delivery Helm Chart
     ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/helm/simplenodeservice.tgz --resourceUri=helm/simplenodeservice.tgz"
     ignore_errors: true
-  # - name: Create Dynatrace secret
-  #   ansible.builtin.command: "keptn create secret dynatrace --scope=dynatrace-service --from-literal=DT_TENANT={{ dynatrace_tenant_url }} --from-literal=DT_API_TOKEN={{ dynatrace_api_token }}"
-  #   ignore_errors: true
   - name: Upload dynatrace.conf.yaml
     ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --resource={{ role_path }}/files/dynatrace.conf.yaml --resourceUri=dynatrace/dynatrace.conf.yaml"
     ignore_errors: true
   - name: Configure Dynatrace monitoring
     ansible.builtin.command: "keptn configure monitoring dynatrace --project=demo-synthetic-on-demand"
     ignore_errors: true
+  - name: Upload Job Executor resources
+    ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/job_config.yaml --resourceUri=job/config.yaml"
+    ignore_errors: true
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/locust.conf --resourceUri=locust/locust.conf"
+    ignore_errors: true
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/locustfile.py --resourceUri=locust/locustfile.py"
+    ignore_errors: true
 
     # keptn trigger delivery --project=demo-synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
 
-# - include_role:
-#     name: dashboard
-#   vars:
-#     dashboard_ingress_class: istio
+- include_role:
+    name: dashboard

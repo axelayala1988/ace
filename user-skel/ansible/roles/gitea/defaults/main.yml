@@ -6,4 +6,3 @@ gitea_password: "dynatrace"
 gitea_email: "ace@dynatrace.com"
 gitea_namespace: "gitea"
 gitea_helm_chart_version: "4.1.1"
-gitea_ingress_class: public

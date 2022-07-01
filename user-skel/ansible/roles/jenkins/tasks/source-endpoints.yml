@@ -9,4 +9,5 @@
 - name: Set facts
   set_fact:
     jenkins_internal_endpoint: "http://{{ jenkins_data.resources[0].spec.clusterIP }}:8080"
+    jenkins_endpoint: "{{ ingress_protocol }}://jenkins.{{ ingress_domain }}"
   when: jenkins_data is defined and jenkins_data.resources[0] is defined
