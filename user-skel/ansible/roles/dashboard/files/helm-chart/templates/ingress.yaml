@@ -37,9 +37,6 @@ metadata:
   annotations:
     meta.helm.sh/release-name: {{ .Chart.Name }}
     meta.helm.sh/release-namespace: ace
-    # nginx.ingress.kubernetes.io/auth-type: basic
-    # nginx.ingress.kubernetes.io/auth-secret: basic-auth
-    # nginx.ingress.kubernetes.io/auth-realm: dashboard
   labels:
     app: {{ .Chart.Name }}
     app.kubernetes.io/managed-by: Helm
@@ -50,6 +47,7 @@ metadata:
 spec:
   hosts:
   - "{{ .Values.domain }}"
+  - "dashboard.{{ .Values.domain }}"
   gateways:
   - "istio-ingress/default-gateway"
   http:
@@ -74,6 +72,7 @@ spec:
     basic_auth_rules:
       - hosts:
           - "{{ .Values.domain }}"
+          - "dashboard.{{ .Values.domain }}"
         prefix: "/"
         request_methods:
           - "GET"
