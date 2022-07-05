@@ -2,7 +2,7 @@
 - name: Deploy Dynatrace Synthetic service
   kubernetes.core.helm:
     name: dynatrace-synthetic-service 
-    chart_ref: "https://github.com/dynatrace-ace/dynatrace-synthetic-service/releases/download/v0.4.0/dt-synthetic-service-0.4.0.tar.gz"
+    chart_ref: "https://github.com/dynatrace-ace/dynatrace-synthetic-service/releases/download/v0.4.1/dt-synthetic-service-0.4.1.tar.gz"
     release_namespace: "{{ keptn_namespace }}"
     create_namespace: true
     wait: true
