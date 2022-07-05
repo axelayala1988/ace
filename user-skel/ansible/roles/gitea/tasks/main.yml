@@ -45,7 +45,7 @@
         namespace: gitea
       spec:
         hosts:
-        - "gitea.acebox-tg.ace-innovation.info"
+        - "{{ gitea_domain }}"
         gateways:
         - "istio-ingress/default-gateway"
         http:

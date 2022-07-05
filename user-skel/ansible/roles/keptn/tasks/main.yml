@@ -65,7 +65,7 @@
         namespace: keptn
       spec:
         hosts:
-        - "keptn.acebox-tg.ace-innovation.info"
+        - "{{ keptn_ingress_domain }}"
         gateways:
         - "istio-ingress/default-gateway"
         http:
