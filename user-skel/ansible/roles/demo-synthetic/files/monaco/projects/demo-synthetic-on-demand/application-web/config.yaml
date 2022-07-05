@@ -1,0 +1,11 @@
+config:
+  - application: "application.json"
+
+application.dev:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }} (dev)"
+
+application.staging:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }} (staging)"
+
+application.production:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }} (production)"

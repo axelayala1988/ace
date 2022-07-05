@@ -2,16 +2,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    meta.helm.sh/release-name: "{{ .Chart.Name }}"
   labels:
     app: "{{ .Chart.Name }}"
     app.kubernetes.io/name: "{{ .Chart.Name }}"
     app.kubernetes.io/component: "api"
-    # app.kubernetes.io/version: "{{ .Values.version }}"
+    app.kubernetes.io/version: "{{ .Values.version }}"
     app.kubernetes.io/managed-by: "Helm"
     chart: "{{ .Chart.Name }}"
-    app.kubernetes.io/part-of: "simplenode-app"
+    app.kubernetes.io/part-of: "{{ .Values.keptn.project }}"
   name: {{ .Chart.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -23,27 +21,33 @@ spec:
       labels:
         app: {{ .Chart.Name }}
         app.kubernetes.io/name: "{{ .Chart.Name }}"
-        # app.kubernetes.io/version: "{{ .Values.version }}"
+        app.kubernetes.io/version: "{{ .Values.version }}"
         app.kubernetes.io/managed-by: "Helm"
-        app.kubernetes.io/part-of: "simplenode-app"
+        app.kubernetes.io/part-of: "{{ .Values.keptn.project }}"
         app.kubernetes.io/component: "api"
     spec:
       containers:
       - name: {{ .Chart.Name }}
         image: {{ .Values.image }}
         env:
-        # - name: DT_TAGS
-        #   value: {{ .Values.dt_tags }}
-        # - name: DT_CUSTOM_PROP
-        #   value: {{ .Values.dt_custom_prop }}
-        # - name: DT_RELEASE_VERSION
-        #   value: "{{ .Values.version }}"
-        # - name: DT_RELEASE_BUILD_VERSION
-        #   value: "{{ .Values.build_version }}"
-        # - name: DT_RELEASE_PRODUCT
-        #   value: "simplenode-app"
+        - name: KEPT_PROJECT
+          value: "{{ .Values.keptn.project }}"
+        - name: KEPT_STAGE
+          value: "{{ .Values.keptn.stage }}"
+        - name: KEPT_SERVICE
+          value: "{{ .Values.keptn.service }}"
+        - name: DT_RELEASE_VERSION
+          value: "{{ .Values.version }}"
+        - name: DT_RELEASE_BUILD_VERSION
+          value: "{{ .Values.version }}"
+        - name: DT_RELEASE_PRODUCT
+          value: "{{ .Values.keptn.service }}"
         - name: DT_RELEASE_STAGE
-          value: "{{ .Release.Namespace }}"
+          value: "{{ .Values.keptn.stage }}"
+        - name: DT_TAGS
+          value: {{ .Values.dt_tags }}
+        - name: DT_CUSTOM_PROP
+          value: "RELEASE_BUILD_VERSION={{ .Values.version }} RELEASE_STAGE={{ .Values.keptn.stage }}"
         resources:
           limits:
             cpu: 200m

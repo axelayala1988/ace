@@ -1,0 +1,19 @@
+
+---
+spec_version: "0.1.1"
+comparison:
+  aggregate_function: "avg"
+  compare_with: "single_result"
+  include_result_with_score: "pass"
+  number_of_comparison_results: 1
+filter:
+objectives:
+  - sli: "e2e_synthetic_success_rate"
+    displayName: "E2E Synthetic test success rate"
+    key_sli: true
+    pass:
+      - criteria:
+          - ">99"
+    weight: 1
+total_score:
+  pass: "100%"

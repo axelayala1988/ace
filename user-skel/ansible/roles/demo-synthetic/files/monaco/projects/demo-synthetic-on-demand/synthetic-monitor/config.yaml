@@ -1,0 +1,37 @@
+config:
+    - functional: "functional.json"
+    - performance: "performance.json"
+
+functional.dev:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-dev.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - url: "http://{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-dev.{{ .Env.INGRESS_DOMAIN }}"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "{{ .Env.DT_RELEASE_PRODUCT }}-dev"
+    - enabled: "true"
+
+performance.dev:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-dev.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - skipDeployment: "true"
+
+functional.staging:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-staging.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - skipDeployment: "true"
+
+performance.staging:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-staging.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - url: "http://{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-staging.{{ .Env.INGRESS_DOMAIN }}"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - location_2: "GEOLOCATION-0DF9A0E1095A5A62"
+    - location_3: "GEOLOCATION-388A5AD15726CB6F"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "{{ .Env.DT_RELEASE_PRODUCT }}-staging"
+    - enabled: "true"
+
+functional.production:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-production.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - skipDeployment: "true"
+
+performance.production:
+    - name: "{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-dev.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - skipDeployment: "true"

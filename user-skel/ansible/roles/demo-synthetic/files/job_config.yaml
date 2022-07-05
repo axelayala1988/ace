@@ -3,17 +3,61 @@ apiVersion: v2
 actions:
   - name: "Sleep"
     events:
-      - name: "sh.keptn.event.sleep.triggered"
+      - name: "sh.keptn.event.waitForApplication.triggered"
     tasks:
       - name: "Run sleep"
         image: "dynatraceace/keptn-gitlab-runner:latest"
         cmd:
           - sleep
         args:
-          - 120
+          - 60
+  - name: "Monaco"
+    events:
+      - name: "sh.keptn.event.monaco.triggered"
+    tasks:
+      - name: "Deploy Monaco configurations"
+        image: "dynatraceace/monaco-runner:latest"
+        workingDir: "/keptn"
+        files:
+          - /monaco
+        cmd:
+          - "monaco"
+        args:
+          - deploy
+          - "--environments=/keptn/monaco/environments.yaml"
+          - "--specific-environment"
+          - $(DT_RELEASE_STAGE)
+          - "/keptn/monaco"
+        env:
+          - name: dynatrace
+            valueFrom: secret
+          - name: NEW_CLI
+            valueFrom: string
+            value: "1"
+          - name: DT_RELEASE_VERSION
+            value: "$.data.labels.DT_RELEASE_BUILD_VERSION"
+            valueFrom: event
+          - name: DT_RELEASE_BUILD_VERSION
+            value: "$.data.labels.DT_RELEASE_BUILD_VERSION"
+            valueFrom: event
+          - name: DT_RELEASE_STAGE
+            value: "$.data.stage"
+            valueFrom: event
+          - name: DT_RELEASE_PRODUCT
+            value: "$.data.service"
+            valueFrom: event
+          - name: PROJECT
+            value: "$.data.project"
+            valueFrom: event
+          - name: INGRESS_DOMAIN
+            valueFrom: string
+            value: "acebox-tg.ace-innovation.info"
   - name: "Locust test"
     events:
       - name: "sh.keptn.event.test.triggered"
+        jsonpath:
+          property: "$.data.test.testStrategy"
+          match: "locust"
     tasks:
       - name: "Run test"
         image: "locustio/locust"
@@ -34,5 +78,5 @@ actions:
             value: "$.data.deployment.deploymentURIsPublic[0]"
             valueFrom: event
           - name: LOCUST_LOAD_TEST_NAME
-            value: "$.shkeptncontext"
+            value: "$.data.labels.DT_RELEASE_BUILD_VERSION"
             valueFrom: event

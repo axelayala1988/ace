@@ -1,0 +1,17 @@
+config:
+  - rule: "rule.json"
+
+rule.dev:
+  - name: "/projects/demo-synthetic-on-demand/application-web/application.name"
+  - applicationId: "/projects/demo-synthetic-on-demand/application-web/application.id"
+  - pattern: "http://{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-dev.{{ .Env.INGRESS_DOMAIN }}"
+
+rule.staging:
+  - name: "/projects/demo-synthetic-on-demand/application-web/application.name"
+  - applicationId: "/projects/demo-synthetic-on-demand/application-web/application.id"
+  - pattern: "http://{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-staging.{{ .Env.INGRESS_DOMAIN }}"
+
+rule.production:
+  - name: "/projects/demo-synthetic-on-demand/application-web/application.name"
+  - applicationId: "/projects/demo-synthetic-on-demand/application-web/application.id"
+  - pattern: "http://{{ .Env.DT_RELEASE_PRODUCT }}.{{ .Env.PROJECT }}-production.{{ .Env.INGRESS_DOMAIN }}"

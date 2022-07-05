@@ -1,0 +1,14 @@
+dev:
+  - name: "dev"
+  - env-url: "https://{{ .Env.DT_TENANT }}"
+  - env-token-name: "DT_API_TOKEN"
+
+staging:
+  - name: "staging"
+  - env-url: "https://{{ .Env.DT_TENANT }}"
+  - env-token-name: "DT_API_TOKEN"
+
+production:
+  - name: "production"
+  - env-url: "https://{{ .Env.DT_TENANT }}"
+  - env-token-name: "DT_API_TOKEN"

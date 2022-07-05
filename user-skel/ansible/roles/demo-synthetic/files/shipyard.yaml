@@ -9,27 +9,52 @@ spec:
     sequences:
     - name: "delivery"
       tasks:
+        - name: monaco
         - name: "deployment"
           properties:
             deploymentstrategy: "direct"
         - name: "test"
+          properties:
+            monitorTag: simplenodeservice-dev
+            waitFor: EXECUTION
+          triggeredAfter: "2m"
+        - name: "collection"
+          properties:
+            evaluationStartStage: dev
+            evaluationEndStage: dev
+            syntheticTestFinishedStage: dev
+        - name: "evaluation"
+          triggeredAfter: "2m"
   - name: staging
     sequences:
     - name: "delivery"
       triggeredOn:
         - event: "dev.delivery.finished"
       tasks:
-        - name: "deployment"
+        - name: monaco
+        - name: deployment
           properties:
             deploymentstrategy: "direct"
         - name: "test"
+          properties:
+            monitorTag: simplenodeservice-staging
+            waitFor: EXECUTION
+            testStrategy: locust
+          triggeredAfter: "2m"
+        - name: "collection"
+          properties:
+            evaluationStartStage: staging
+            evaluationEndStage: staging
+            syntheticTestFinishedStage: staging
+        - name: "evaluation"
+          triggeredAfter: "2m"
   - name: production
     sequences:
     - name: "delivery"
       triggeredOn:
         - event: "staging.delivery.finished"
       tasks:
+        - name: monaco
         - name: "deployment"
           properties:
             deploymentstrategy: "direct"
-        - name: "test"

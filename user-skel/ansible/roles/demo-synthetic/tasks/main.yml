@@ -34,7 +34,7 @@
     keptn_synthetic_service_enabled: true
     keptn_test_collector_service_enabled: true
     keptn_job_executor_service_enabled: true
-    keptn_job_executor_service_subscriptions: "sh.keptn.event.test.triggered"
+    keptn_job_executor_service_subscriptions: "sh.keptn.event.test.triggered,sh.keptn.event.monaco.triggered"
 
 - include_role:
     name: gitea
@@ -76,13 +76,26 @@
     ignore_errors: true
   - name: Upload Job Executor resources
     ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/job_config.yaml --resourceUri=job/config.yaml"
-    ignore_errors: true
   - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/locust.conf --resourceUri=locust/locust.conf"
-    ignore_errors: true
   - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/locustfile.py --resourceUri=locust/locustfile.py"
-    ignore_errors: true
+  - name: Upload Monaco resources
+    ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/environments.yaml --resourceUri=monaco/environments.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/synthetic-monitor/config.yaml --resourceUri=monaco/projects/demo-synthetic-on-demand/synthetic-monitor/config.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/synthetic-monitor/functional.json --resourceUri=monaco/projects/demo-synthetic-on-demand/synthetic-monitor/functional.json"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/synthetic-monitor/performance.json --resourceUri=monaco/projects/demo-synthetic-on-demand/synthetic-monitor/performance.json"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/application-web/config.yaml --resourceUri=monaco/projects/demo-synthetic-on-demand/application-web/config.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/application-web/application.json --resourceUri=monaco/projects/demo-synthetic-on-demand/application-web/application.json"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/app-detection-rule/config.yaml --resourceUri=monaco/projects/demo-synthetic-on-demand/app-detection-rule/config.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --all-stages --resource={{ role_path }}/files/monaco/projects/demo-synthetic-on-demand/app-detection-rule/rule.json --resourceUri=monaco/projects/demo-synthetic-on-demand/app-detection-rule/rule.json"
+  - name: Upload SLIs/SLOs
+    ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --stage=dev --resource={{ role_path }}/files/slo-dev.yaml --resourceUri=slo.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --stage=dev --resource={{ role_path }}/files/sli-dev.yaml --resourceUri=dynatrace/sli.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --stage=staging --resource={{ role_path }}/files/slo-staging.yaml --resourceUri=slo.yaml"
+  - ansible.builtin.command: "keptn add-resource --project=demo-synthetic-on-demand --service=simplenodeservice --stage=staging --resource={{ role_path }}/files/sli-staging.yaml --resourceUri=dynatrace/sli.yaml"
 
-    # keptn trigger delivery --project=demo-synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2
+# tar -czf simplenodeservice.tgz simplenodeservice
+
+# keptn trigger delivery --project=demo-synthetic-on-demand --service=simplenodeservice --image=dynatraceace/simplenodeservice:1.0.2 --values=version=1.0.2 --labels=DT_RELEASE_BUILD_VERSION=1.0.2
 
 - include_role:
     name: dashboard
