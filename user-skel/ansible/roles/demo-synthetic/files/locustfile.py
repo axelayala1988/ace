@@ -21,13 +21,28 @@ class TestUser(HttpUser):
     self.client.headers = {
       'x-dynatrace-test': generateXDynatraceTestHeader("Test Root"),
     }
-    self.client.get('/')
+    # self.client.get('/')
+    with self.client.get("/", catch_response=True) as response:
+      if response.status_code == 503:
+        response.success()
 
   @task
   def api(self):
     self.client.headers = {
       'x-dynatrace-test': generateXDynatraceTestHeader("Test API"),
     }
-    self.client.get('/api/version')
-    self.client.get('/api/echo')
-    self.client.get(f'/api/invoke?url={self.host}')
+
+    # self.client.get('/api/version')
+    with self.client.get("/api/version", catch_response=True) as response:
+      if response.status_code == 503:
+        response.success()
+
+    # self.client.get('/api/echo')
+    with self.client.get("/api/echo", catch_response=True) as response:
+      if response.status_code == 503:
+        response.success()
+
+    # self.client.get(f'/api/invoke?url={self.host}')
+    with self.client.get(f'/api/invoke?url={self.host}', catch_response=True) as response:
+      if response.status_code == 503:
+        response.success()
