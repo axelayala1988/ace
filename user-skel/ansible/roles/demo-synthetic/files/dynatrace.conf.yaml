@@ -1,3 +1,17 @@
 ---
 spec_version: '0.1.0'
 dtCreds: dynatrace
+attachRules:
+  tagRule:
+  - meTypes:
+    - PROCESS_GROUP_INSTANCE
+    tags:
+    - context: ENVIRONMENT
+      key: DT_RELEASE_BUILD_VERSION
+      value: $LABEL.DT_RELEASE_BUILD_VERSION
+    - context: ENVIRONMENT
+      key: DT_RELEASE_STAGE
+      value: $STAGE
+    - context: ENVIRONMENT
+      key: DT_RELEASE_PRODUCT
+      value: $SERVICE
