@@ -1,0 +1,19 @@
+config:
+  - failure-rate-by-ltn: "failure-rate-by-ltn.json"
+  - response-time-by-ltn: "response-time-by-ltn.json"
+  - response-time-by-method-and-ltn: "response-time-by-method-and-ltn.json"
+
+failure-rate-by-ltn:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }}.failure_rate_by_ltn"
+  - metricKey: "calc:service.{{ .Env.DT_RELEASE_PRODUCT }}.failure_rate_by_ltn"
+  - product: "{{ .Env.DT_RELEASE_PRODUCT }}"
+
+response-time-by-ltn:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }}.response_time_by_ltn"
+  - metricKey: "calc:service.{{ .Env.DT_RELEASE_PRODUCT }}.response_time_by_ltn"
+  - product: "{{ .Env.DT_RELEASE_PRODUCT }}"
+
+response-time-by-method-and-ltn:
+  - name: "{{ .Env.DT_RELEASE_PRODUCT }}.response_time_by_method_and_ltn"
+  - metricKey: "calc:service.{{ .Env.DT_RELEASE_PRODUCT }}.response_time_by_method_and_ltn"
+  - product: "{{ .Env.DT_RELEASE_PRODUCT }}"
