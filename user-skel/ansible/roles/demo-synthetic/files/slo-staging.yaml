@@ -46,6 +46,18 @@ objectives:
       - criteria:
           - "<=1000000"
     weight: 1
+  - sli: "response_time_invoke_api"
+    displayName: "Response Time Invoke API Method"
+    key_sli: false
+    weight: 2
+    pass:
+      - criteria:
+          - "<=+10%"
+          - "<850000"
+    warning:
+      - criteria:
+          - "<=+20%"
+          - "<=1000000"
   - sli: "failure_rate"
     displayName: "Error Rate"
     pass:
