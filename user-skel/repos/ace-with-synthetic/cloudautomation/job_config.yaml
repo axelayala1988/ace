@@ -1,0 +1,38 @@
+---
+apiVersion: v2
+actions:
+  - name: "Sleep"
+    events:
+      - name: "sh.keptn.event.sleep.triggered"
+    tasks:
+      - name: "Run sleep"
+        image: "dynatraceace/keptn-gitlab-runner:latest"
+        cmd:
+          - sleep
+        args:
+          - 120
+  - name: "Locust test"
+    events:
+      - name: "sh.keptn.event.test.triggered"
+    tasks:
+      - name: "Run test"
+        image: "locustio/locust"
+        workingDir: "/keptn"
+        files:
+          - /locust
+        cmd:
+          - locust
+        args:
+          - "--config"
+          - /keptn/locust/locust.conf
+          - "--locustfile"
+          - /keptn/locust/locustfile.py
+          - "--host"
+          - $(LOCUST_HOST)
+        env:
+          - name: LOCUST_HOST
+            value: "$.data.locustHost"
+            valueFrom: event
+          - name: LOCUST_LOAD_TEST_NAME
+            value: "$.data.labels.LOAD_TEST_NAME"
+            valueFrom: event

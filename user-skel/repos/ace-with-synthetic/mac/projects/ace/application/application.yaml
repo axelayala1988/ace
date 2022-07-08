@@ -1,0 +1,13 @@
+config:
+    - app-simplenode-staging: "application.json"
+    - app-simplenode-prod: "application.json"
+    - app-simplenode-gitlab-staging: "application.json"
+  
+app-simplenode-staging:
+    - name: "app.simplenodeservice.staging"
+
+app-simplenode-prod:
+    - name: "app.simplenodeservice.production"
+
+app-simplenode-gitlab-staging:
+    - name: "app.simplenodeservice.gitlab.staging"

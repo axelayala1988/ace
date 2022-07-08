@@ -1,0 +1,201 @@
+---
+variables:
+  BUILD_ID: '1'  # 1, 2, 3 or 4
+  DT_RELEASE_VERSION: '$BUILD_ID.0.2'
+  DT_RELEASE_BUILD_VERSION: '$BUILD_ID.0.2-$CI_COMMIT_SHORT_SHA'
+  DT_RELEASE_PRODUCT: 'simplenode-app'
+  # DT_RELEASE_STAGE: 'simplenode-gitlab-staging'
+  SYNTHETIC_TEST_TAG_STAGING: 'simplenode-gitlab-staging'
+  CA_ENDPOINT: $KEPTN_ENDPOINT
+  CA_API_TOKEN: $KEPTN_API_TOKEN
+  CA_PROJECT: simplenodeproject
+  CA_SERVICE: simplenodeservice
+
+stages:
+  - "Init (DEV)"
+  - "Deploy (DEV)"
+  - "Evaluate (DEV)"
+  # - "Promote (DEV-STAGING)"
+  - "Init (STAGING)"
+  - "Deploy (STAGING)"
+  - "Evaluate (STAGING)"
+  # - "Promote (STAGING-PRODUCTION)"
+  - "Init (PRODUCTION)"
+  - "Deploy (PRODUCTION)"
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "dev"
+
+Monaco (DEV):
+  image: dynatraceace/monaco-runner:release-v1.6.0
+  stage: "Init (DEV)"
+  variables: 
+    DT_RELEASE_STAGE: dev
+  script:
+    # - monaco -v -dry-run -e=mac/environments.yaml -p=infrastructure mac/projects
+    # - monaco -v -e=mac/environments.yaml -p=infrastructure mac/projects
+    - monaco -v -dry-run -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+    - monaco -v -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+
+Cloud Automation init (DEV):
+  image: dynatraceace/keptn-gitlab-runner:latest
+  stage: "Init (DEV)"
+  variables:
+    DT_RELEASE_STAGE: dev
+  script:
+    - >
+      clauctl init 
+      --stage=$DT_RELEASE_STAGE
+      --slo="cloudautomation/slo-dev.yaml"
+      --sli="cloudautomation/sli-dev.yaml"
+      --resource="job/config.yaml=cloudautomation/job_config.yaml" 
+      --resource="locust/locust.conf=locust/locust.conf" 
+      --resource="locust/locustfile.py=locust/locustfile.py" 
+      --verbose
+  artifacts:
+    paths: 
+    - cloudautomation.init.json
+
+Deploy (DEV):
+  image: dtzar/helm-kubectl
+  stage: "Deploy (DEV)"
+  variables:
+    DT_RELEASE_STAGE: dev
+  script:
+    - >
+      helm upgrade --install $DT_RELEASE_PRODUCT helm/simplenodeservice 
+      --set image="dynatraceace/simplenodeservice:$DT_RELEASE_VERSION"
+      --set domain="$INGRESS_DOMAIN" 
+      --set version="$DT_RELEASE_VERSION"
+      --set build_version="$DT_RELEASE_BUILD_VERSION" 
+      --set environment="$DT_RELEASE_STAGE" 
+      --set dt_custom_prop="RELEASE_BUILD_VERSION=$DT_RELEASE_BUILD_VERSION RELEASE_STAGE=$DT_RELEASE_STAGE"
+      --namespace "$DT_RELEASE_STAGE" --create-namespace 
+      --wait
+
+Evaluate (DEV):
+  image: dynatraceace/keptn-gitlab-runner:latest
+  stage: "Evaluate (DEV)"
+  variables:
+    DT_RELEASE_STAGE: dev
+  script:
+    - >
+      clauctl evaluate 
+      --stage=$DT_RELEASE_STAGE
+      --label=DT_RELEASE_VERSION=$DT_RELEASE_VERSION 
+      --label=DT_RELEASE_BUILD_VERSION=$DT_RELEASE_BUILD_VERSION 
+      --label=DT_RELEASE_STAGE=$DT_RELEASE_STAGE 
+      --label=DT_RELEASE_PRODUCT=$DT_RELEASE_PRODUCT 
+      --label=LOAD_TEST_NAME=$DT_RELEASE_BUILD_VERSION 
+      --attribute=locustHost=$INGRESS_PROTOCOL://simplenodeservice.$DT_RELEASE_STAGE.$INGRESS_DOMAIN 
+      --attribute=monitorTag=simplenodeservice-$DT_RELEASE_STAGE 
+      --attribute=waitFor=EXECUTION 
+      --timeout=10 --verbose
+
+Monaco (STAGING):
+  image: dynatraceace/monaco-runner:release-v1.6.0
+  stage: "Init (STAGING)"
+  variables: 
+    DT_RELEASE_STAGE: staging
+  script:
+    - monaco -v -dry-run -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+    - monaco -v -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+
+Cloud Automation init (STAGING):
+  image: dynatraceace/keptn-gitlab-runner:latest
+  stage: "Init (STAGING)"
+  variables:
+    DT_RELEASE_STAGE: staging
+  script:
+    - >
+      clauctl init
+      --stage=$DT_RELEASE_STAGE 
+      --slo="cloudautomation/slo-staging.yaml"
+      --sli="cloudautomation/sli-staging.yaml"
+      --resource="job/config.yaml=cloudautomation/job_config.yaml" 
+      --resource="locust/locust.conf=locust/locust.conf" 
+      --resource="locust/locustfile.py=locust/locustfile.py" 
+      --verbose
+  artifacts:
+    paths: 
+    - cloudautomation.init.json
+
+Deploy (STAGING):
+  image: dtzar/helm-kubectl
+  stage: "Deploy (STAGING)"
+  variables:
+    DT_RELEASE_STAGE: staging
+  script:
+    - >
+      helm upgrade --install $DT_RELEASE_PRODUCT helm/simplenodeservice 
+      --set image="dynatraceace/simplenodeservice:$DT_RELEASE_VERSION"
+      --set domain="$INGRESS_DOMAIN" 
+      --set version="$DT_RELEASE_VERSION"
+      --set build_version="$DT_RELEASE_BUILD_VERSION" 
+      --set environment="$DT_RELEASE_STAGE" 
+      --set dt_custom_prop="RELEASE_BUILD_VERSION=$DT_RELEASE_BUILD_VERSION RELEASE_STAGE=$DT_RELEASE_STAGE"
+      --namespace "$DT_RELEASE_STAGE" --create-namespace 
+      --wait
+
+Evaluate (STAGING):
+  image: dynatraceace/keptn-gitlab-runner:latest
+  stage: "Evaluate (STAGING)"
+  variables:
+    DT_RELEASE_STAGE: staging
+  script:
+    - >
+      clauctl evaluate 
+      --stage=$DT_RELEASE_STAGE
+      --label=DT_RELEASE_VERSION=$DT_RELEASE_VERSION 
+      --label=DT_RELEASE_BUILD_VERSION=$DT_RELEASE_BUILD_VERSION 
+      --label=DT_RELEASE_STAGE=$DT_RELEASE_STAGE 
+      --label=DT_RELEASE_PRODUCT=$DT_RELEASE_PRODUCT 
+      --label=LOAD_TEST_NAME=$DT_RELEASE_BUILD_VERSION 
+      --attribute=locustHost=$INGRESS_PROTOCOL://simplenodeservice.$DT_RELEASE_STAGE.$INGRESS_DOMAIN 
+      --attribute=monitorTag=simplenodeservice-$DT_RELEASE_STAGE 
+      --attribute=waitFor=EXECUTION 
+      --timeout=15 --verbose
+
+Monaco (PRODUCTION):
+  image: dynatraceace/monaco-runner:release-v1.6.0
+  stage: "Init (PRODUCTION)"
+  variables: 
+    DT_RELEASE_STAGE: production
+  script:
+    - monaco -v -dry-run -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+    - monaco -v -e=mac/environments.yaml -p=simplenodeservice -se=$DT_RELEASE_STAGE mac/projects
+
+Cloud Automation init (PRODUCTION):
+  image: dynatraceace/keptn-gitlab-runner:latest
+  stage: "Init (PRODUCTION)"
+  variables:
+    DT_RELEASE_STAGE: production
+  script:
+    - >
+      clauctl init
+      --stage=$DT_RELEASE_STAGE 
+      --slo="cloudautomation/slo-staging.yaml"
+      --sli="cloudautomation/sli-staging.yaml"
+      --verbose
+  artifacts:
+    paths: 
+    - cloudautomation.init.json
+
+Deploy (PRODUCTION):
+  image: dtzar/helm-kubectl
+  stage: "Deploy (PRODUCTION)"
+  variables:
+    DT_RELEASE_STAGE: production
+  script:
+    - >
+      helm upgrade --install $DT_RELEASE_PRODUCT helm/simplenodeservice 
+      --set image="dynatraceace/simplenodeservice:$DT_RELEASE_VERSION"
+      --set domain="$INGRESS_DOMAIN" 
+      --set version="$DT_RELEASE_VERSION"
+      --set build_version="$DT_RELEASE_BUILD_VERSION" 
+      --set environment="$DT_RELEASE_STAGE" 
+      --set dt_custom_prop="RELEASE_BUILD_VERSION=$DT_RELEASE_BUILD_VERSION RELEASE_STAGE=$DT_RELEASE_STAGE"
+      --namespace "$DT_RELEASE_STAGE" --create-namespace 
+      --wait

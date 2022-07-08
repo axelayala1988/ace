@@ -1,0 +1,41 @@
+config:
+    - health-staging: "health-check-monitor.json"
+    - health-prod: "health-check-monitor.json"
+    - e2e: "e2e.json"
+    - e2eContentValidation: "e2e-content-validation.json"
+  
+health-staging:
+    - name: "webcheck.simplenode.staging"
+    - url: "http://simplenodeservice.staging.{{ .Env.INGRESS_DOMAIN }}/api/invoke?url=https://www.dynatrace.com"
+    - description: "Health Check for simplenode in staging"
+    - location: "/infrastructure/synthetic-location/acebox.id"
+    - managementZoneId: "/ace/management-zone/management-zone-staging.id"
+    - tag: "/ace/auto-tag/tagging-staging.name"
+    #- applicationId: "/ace/application/app-simplenode-staging.id"
+    - enabled: "true"
+
+health-prod:
+    - name: "webcheck.simplenode.production"
+    - url: "http://simplenodeservice.production.{{ .Env.INGRESS_DOMAIN }}/api/invoke?url=https://www.dynatrace.com"
+    - description: "Health Check for simplenode in production"
+    - location: "/infrastructure/synthetic-location/acebox.id"
+    - managementZoneId: "/ace/management-zone/management-zone-prod.id"
+    - tag: "/ace/auto-tag/tagging-prod.name"
+    #- applicationId: "/ace/application/app-simplenode-prod.id"
+    - enabled: "true"
+
+e2e:
+    - name: "simplenodeservice.simplenode-gitlab-staging.acebox-tg.ace-innovation.info - E2E"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - location_2: "GEOLOCATION-0DF9A0E1095A5A62"
+    - location_3: "GEOLOCATION-388A5AD15726CB6F"
+    - tag: "simplenode-gitlab-staging"
+    - enabled: "true"
+
+e2eContentValidation:
+    - name: "simplenodeservice.simplenode-gitlab-staging.acebox-tg.ace-innovation.info - E2E Content Validation"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - tag: "simplenode-gitlab-staging"
+    - enabled: "true"

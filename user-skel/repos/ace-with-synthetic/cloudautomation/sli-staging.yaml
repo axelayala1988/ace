@@ -1,0 +1,9 @@
+spec_version: '1.0'
+indicators:
+  e2e_page_load: "USQL;COLUMN_CHART;Page load;SELECT syntheticEvent, AVG(duration) FROM useraction WHERE usersession.internalUserId IN ($LABEL.SYNTHETIC_EXECUTION_IDS) GROUP BY syntheticEvent"
+  e2e_version: "USQL;COLUMN_CHART;Version;SELECT syntheticEvent, AVG(duration) FROM useraction WHERE usersession.internalUserId IN ($LABEL.SYNTHETIC_EXECUTION_IDS) GROUP BY syntheticEvent"
+  e2e_synthetic_success_rate: "metricSelector=ca.synthetic.execution_success_rate:filter(eq(\"ca.synthetic.batch_id\",\"$LABEL.SYNTHETIC_BATCH_IDS\")):avg"
+  failure_rate:          "metricSelector=calc:service.simplenode.failure_rate_by_ltn:merge(\"dt.entity.service\"):splitBy(LTN):filter(and(eq(LTN,$LABEL.LOAD_TEST_NAME))):avg&entitySelector=tag(RELEASE_BUILD_VERSION:$LABEL.DT_RELEASE_BUILD_VERSION),tag(RELEASE_STAGE:$LABEL.DT_RELEASE_STAGE),type(SERVICE)"
+  response_time:   "metricSelector=calc:service.simplenode.response_time_by_ltn:merge(\"dt.entity.service\"):splitBy(LTN):filter(and(eq(LTN,$LABEL.LOAD_TEST_NAME))):percentile(95)&entitySelector=tag(RELEASE_BUILD_VERSION:$LABEL.DT_RELEASE_BUILD_VERSION),tag(RELEASE_STAGE:$LABEL.DT_RELEASE_STAGE),type(SERVICE)"
+  pg_heap_suspension:  "metricSelector=builtin:tech.jvm.memory.gc.suspensionTime:merge(\"dt.entity.process_group_instance\"):max&entitySelector=tag(RELEASE_BUILD_VERSION:$LABEL.DT_RELEASE_BUILD_VERSION),tag(RELEASE_STAGE:$LABEL.DT_RELEASE_STAGE),type(PROCESS_GROUP_INSTANCE)"
+  pg_cpu_usage:        "metricSelector=builtin:tech.generic.cpu.usage:merge(\"dt.entity.process_group_instance\"):max&entitySelector=tag(RELEASE_BUILD_VERSION:$LABEL.DT_RELEASE_BUILD_VERSION),tag(RELEASE_STAGE:$LABEL.DT_RELEASE_STAGE),type(PROCESS_GROUP_INSTANCE)"

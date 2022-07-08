@@ -1,0 +1,47 @@
+---
+apiVersion: "spec.keptn.sh/0.2.0"
+kind: "Shipyard"
+metadata:
+  name: "simplenodeproject"
+spec:
+  stages:
+    - name: "dev"
+      sequences:
+      - name: "evaluation"
+        tasks:
+        # Sleep task is added as a workaround for
+        # https://github.com/keptn/keptn/issues/8124
+        - name: "sleep"
+        - name: "test"
+          # triggeredAfter: "2m"
+        - name: "collection"
+        - name: "evaluation"
+          triggeredAfter: "2m"
+    - name: "staging"
+      sequences:
+      - name: "evaluation"
+        tasks:
+        - name: "sleep"
+        - name: "test"
+          # triggeredAfter: "2m"
+        - name: "collection"
+        - name: "evaluation"
+          triggeredAfter: "2m"
+    - name: "production"
+
+    # - name: "staging"
+    #   sequences:
+    #   - name: "test"
+    #     tasks:
+    #     - name: "test"
+    #       triggeredAfter: "1m"
+    #   - name: "evaluation"
+    #     tasks:
+    #     - name: "collection"
+    #     - name: "evaluation"
+    # - name: "qa"
+    #   sequences:
+    #   - name: "evaluation"
+    #     tasks:
+    #     - name: "evaluation"
+    #       # triggeredAfter: "10m"

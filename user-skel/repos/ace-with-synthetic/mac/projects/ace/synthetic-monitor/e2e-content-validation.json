@@ -1,0 +1,114 @@
+{
+  "name": "{{ .name }}",
+  "frequencyMin": 0,
+  "enabled": {{ .enabled }},
+  "type": "BROWSER",
+  "createdFrom": "GUI",
+  "script": {
+    "type": "clickpath",
+    "version": "1.0",
+    "configuration": {
+      "device": {
+        "deviceName": "Desktop",
+        "orientation": "landscape"
+      },
+      "chromiumStartupFlags": {
+        "disable-web-security": false
+      }
+    },
+    "events": [
+      {
+        "type": "navigate",
+        "description": "Page load",
+        "url": "{{ .url }}",
+        "wait": {
+          "waitFor": "page_complete"
+        }
+      },
+      {
+        "type": "click",
+        "description": "Version",
+        "validate": [
+          {
+            "type": "text_match",
+            "match": "RELEASE_BUILD_VERSION=42.0.2",
+            "isRegex": false,
+            "failIfFound": false
+          }
+        ],
+        "target": {
+          "locators": [
+            {
+              "type": "css",
+              "value": "#Version"
+            },
+            {
+              "type": "css",
+              "value": "button:eq(3)"
+            },
+            {
+              "type": "css",
+              "value": "button:contains(\"Get MyVersion!\")"
+            },
+            {
+              "type": "css",
+              "value": "html body:nth-child(8) div:nth-child(2) div:nth-child(6) button"
+            },
+            {
+              "type": "css",
+              "value": "#Version"
+            }
+          ]
+        },
+        "button": 0,
+        "wait": {
+          "waitFor": "network"
+        }
+      }
+    ]
+  },
+  "locations": [
+    "{{ .location_1 }}"
+  ],
+  "anomalyDetection": {
+    "outageHandling": {
+      "globalOutage": true,
+      "globalOutagePolicy": {
+        "consecutiveRuns": 1
+      },
+      "localOutage": false,
+      "localOutagePolicy": {
+        "affectedLocations": null,
+        "consecutiveRuns": null
+      },
+      "retryOnError": true
+    },
+    "loadingTimeThresholds": {
+      "enabled": true,
+      "thresholds": []
+    }
+  },
+  "tags": [
+    "{{ .tag }}"
+  ],
+  "managementZones": [],
+  "automaticallyAssignedApps": [],
+  "manuallyAssignedApps": [],
+  "keyPerformanceMetrics": {
+    "loadActionKpm": "VISUALLY_COMPLETE",
+    "xhrActionKpm": "RESPONSE_END"
+  },
+  "events": [
+    {
+      "entityId": "SYNTHETIC_TEST_STEP-6DD1BD63544FC0F8",
+      "name": "Page load",
+      "sequenceNumber": 1
+    },
+    {
+      "entityId": "SYNTHETIC_TEST_STEP-897013DC56C50A91",
+      "name": "Version",
+      "sequenceNumber": 2
+    }
+  ]
+}
+

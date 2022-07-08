@@ -1,0 +1,19 @@
+config:
+    - tagging-staging: "tagging.json"
+    - tagging-prod: "tagging.json"
+    - release-stage: "release-stage.json"
+    - release-build-version: "release-build-version.json"
+  
+tagging-staging:
+    - name: "mac-staging"
+    - namespace: "staging"
+
+tagging-prod:
+    - name: "mac-prod"
+    - namespace: "production"
+
+release-stage:
+    - name: "RELEASE_STAGE"
+
+release-build-version:
+    - name: "RELEASE_BUILD_VERSION"

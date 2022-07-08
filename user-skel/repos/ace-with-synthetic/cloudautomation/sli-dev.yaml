@@ -1,0 +1,4 @@
+---
+spec_version: '1.0'
+indicators:
+  e2e_synthetic_success_rate: "metricSelector=ca.synthetic.execution_success_rate:filter(eq(\"ca.synthetic.batch_id\",\"$LABEL.SYNTHETIC_BATCH_IDS\")):avg"

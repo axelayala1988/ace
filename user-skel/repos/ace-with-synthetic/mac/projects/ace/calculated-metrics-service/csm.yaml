@@ -1,0 +1,16 @@
+config:
+    - simplenode.staging: "csm.json"
+    - failure-rate-by-ltn: "failure-rate-by-ltn.json"
+    - response-time-by-ltn: "response-time-by-ltn.json"
+
+simplenode.staging:
+    - name: "simplenode.staging"
+    - metricKey: "calc:service.simplenode.staging"
+
+failure-rate-by-ltn:
+    - name: "simplenode.failure_rate_by_ltn"
+    - metricKey: "calc:service.simplenode.failure_rate_by_ltn"
+
+response-time-by-ltn:
+    - name: "simplenode.response_time_by_ltn"
+    - metricKey: "calc:service.simplenode.response_time_by_ltn"

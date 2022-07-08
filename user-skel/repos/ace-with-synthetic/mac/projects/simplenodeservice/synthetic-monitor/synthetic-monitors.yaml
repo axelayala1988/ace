@@ -1,0 +1,51 @@
+config:
+    - functional: "functional.json"
+    - performance: "performance.json"
+
+functional.dev:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "simplenodeservice-{{ .Env.DT_RELEASE_STAGE }}"
+    - enabled: "true"
+
+performance.dev:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - skipDeployment: "true"
+
+functional.staging:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "simplenodeservice-{{ .Env.DT_RELEASE_STAGE }}"
+    - enabled: "true"
+
+performance.staging:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - location_2: "GEOLOCATION-0DF9A0E1095A5A62"
+    - location_3: "GEOLOCATION-388A5AD15726CB6F"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "simplenodeservice-{{ .Env.DT_RELEASE_STAGE }}"
+    - enabled: "true"
+
+functional.production:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Functional"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "simplenodeservice-{{ .Env.DT_RELEASE_STAGE }}"
+    - enabled: "true"
+
+performance.production:
+    - name: "simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }} - Performance"
+    - url: "http://simplenodeservice.{{ .Env.DT_RELEASE_STAGE }}.{{ .Env.INGRESS_DOMAIN }}/"
+    - location_1: "GEOLOCATION-9999453BE4BDB3CD"
+    - location_2: "GEOLOCATION-0DF9A0E1095A5A62"
+    - location_3: "GEOLOCATION-388A5AD15726CB6F"
+    - releaseBuildVersion:  "{{ .Env.DT_RELEASE_BUILD_VERSION }}"
+    - tag: "simplenodeservice-{{ .Env.DT_RELEASE_STAGE }}"
+    - enabled: "true"
