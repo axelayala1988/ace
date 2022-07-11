@@ -19,8 +19,20 @@
     name: keptn
   when: cloud_automation_flavor is defined and cloud_automation_flavor == "KEPTN"
 
+#Delete secret as this is part of the HOT exercises
+- include_role:
+    name: keptn
+    tasks_from: delete-dynatrace-secret
+  when: cloud_automation_flavor is defined and cloud_automation_flavor == "KEPTN"
+
 - include_role:
     name: cloudautomation
+  when: cloud_automation_flavor is defined and cloud_automation_flavor == "CLOUD_AUTOMATION"
+
+#Delete secret as this is part of the HOT exercises
+- include_role:
+    name: cloudautomation
+    tasks_from: delete-dynatrace-secret
   when: cloud_automation_flavor is defined and cloud_automation_flavor == "CLOUD_AUTOMATION"
 
 - include_role:
