@@ -7,6 +7,22 @@ controller:
               folder('{{ demo_jenkins_folder }}')
               description('Check out {{ ingress_protocol }}://{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}/src/branch/main/demo/appsec for more information')
           - script: >
+              multibranchPipelineJob('{{ demo_jenkins_folder }}/Detect SCM drift') {
+                branchSources {
+                  git {
+                    id('{{ demo_jenkins_folder }}/Detect SCM drift')
+                    remote('{{ ingress_protocol }}://{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}')
+                    credentialsId('git-creds-ace')
+                    includes('main')
+                  }
+                }
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('jenkins/appsec/triggerBuild.Jenkinsfile')
+                  }
+                }
+              }
+          - script: >
               pipelineJob('{{ demo_jenkins_folder }}/1. Build') {
                 parameters {
                   choiceParam('BUILD', ['1','2','3','4','5'], 'Select the build you want to deploy (affects application behavior, github.com/grabnerandi/simplenodeservice for more details)')
