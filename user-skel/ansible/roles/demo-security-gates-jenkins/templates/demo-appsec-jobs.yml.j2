@@ -10,7 +10,7 @@ controller:
               multibranchPipelineJob('{{ demo_jenkins_folder }}/Detect SCM drift') {
                 branchSources {
                   git {
-                    id('{{ demo_jenkins_folder }}/Detect SCM drift')
+                    id('E9F8F617-0F1E-4BA0-929C-77F36953361B')
                     remote('{{ ingress_protocol }}://{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}')
                     credentialsId('git-creds-ace')
                     includes('main')
