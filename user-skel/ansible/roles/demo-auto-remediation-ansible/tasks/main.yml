@@ -98,6 +98,11 @@
     demo_jenkins_folder: "{{ demo_auto_remediation_folder }}"
     git_domain: "gitea.{{ ingress_domain }}"
 
+# Create AWX secret before Jenkins so AWX credentials can be configured in Jenkins
+- include_role:
+    name: awx
+    tasks_from: create-secrets
+
 - include_role:
     name: jenkins
 
