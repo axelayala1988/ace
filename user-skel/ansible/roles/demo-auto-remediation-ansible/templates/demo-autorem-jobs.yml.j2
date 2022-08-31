@@ -10,8 +10,7 @@ controller:
               branchSources {
                 git {
                   id('6C9A37AF-C23C-4D29-A72A-F6AAB6B34930')
-                  remote('{{ ingress_protocol }}://{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}')
-                  credentialsId('git-creds-ace')
+                  remote('{{ ingress_protocol }}://{{ git_username }}:{{ git_token }}@{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}.git')
                   includes('main')
                 }
               }
