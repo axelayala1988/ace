@@ -119,3 +119,7 @@
 
 - include_role:
     name: dashboard
+
+# Trigger use case at the very end to make sure all tools are available
+- include_tasks:
+    file: trigger-use-case.yml

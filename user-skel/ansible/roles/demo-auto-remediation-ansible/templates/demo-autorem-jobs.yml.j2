@@ -6,21 +6,6 @@ controller:
         - script: >
             folder('{{ demo_jenkins_folder }}')
         - script: >
-            multibranchPipelineJob('{{ demo_jenkins_folder }}/Detect SCM drift') {
-              branchSources {
-                git {
-                  id('6C9A37AF-C23C-4D29-A72A-F6AAB6B34930')
-                  remote('{{ ingress_protocol }}://{{ git_username }}:{{ git_token }}@{{ git_domain }}/{{ demo_org }}/{{ demo_repo }}.git')
-                  includes('main')
-                }
-              }
-              factory {
-                workflowBranchProjectFactory {
-                  scriptPath('jenkins/canary/triggerBuild.Jenkinsfile')
-                }
-              }
-            }
-        - script: >
             pipelineJob('{{ demo_jenkins_folder }}/1. Build images') {
               definition {
                 cpsScm {
