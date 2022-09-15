@@ -8,6 +8,14 @@
     channel: "{{ microk8s_release_channel }}"
   register: microk8s
 
+- name: Ensure external IP is added to csr.conf.template
+  become: true
+  become_user: root
+  ansible.builtin.lineinfile:
+    path: /var/snap/microk8s/current/certs/csr.conf.template
+    insertafter: "^#MOREIPS"
+    line: "IP.100 = {{ host_ip }}"
+
 # Install kubectl and helm via snap to not be dependent on microk8s' kube config
 - name: Install Kubectl and Helm
   become: true

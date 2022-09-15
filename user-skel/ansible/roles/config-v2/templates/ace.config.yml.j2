@@ -1,6 +1,7 @@
 ---
 # Host
 host_group: "{{ host_group | default('ace-box') }}"
+host_ip: "{{ host_ip | default('127.0.0.1') }}"
 ingress_class: "{{ ingress_class | default('public') }}"
 ingress_domain: "{{ ingress_domain | default(None) }}"
 ingress_protocol: "{{ ingress_protocol | default(None) }}"

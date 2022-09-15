@@ -187,6 +187,13 @@ def ace(
     ),
     envvar='ACE_HOST_GROUP',
 )
+@click.option(
+    '--host-ip',
+    help=(
+        'Please enter the host\'s public ip (if available)'
+    ),
+    envvar='ACE_HOST_IP',
+)
 @click.option('--extra-var', multiple=True)
 @click.option(
     '-f',
@@ -203,6 +210,7 @@ def prepare(
     ca_tenant,
     ca_api_token,
     host_group,
+    host_ip,
     ansible_workdir,
     user,
     extra_var,
@@ -261,6 +269,7 @@ def prepare(
         'ca_api_token': ca_api_token,
         'ace_box_user': user,
         'host_group': host_group,
+        'host_ip': host_ip,
         'extra_vars': {}
     }
 

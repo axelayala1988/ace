@@ -36,6 +36,7 @@ microk8s/share
 *.tfstate
 *.tfstate.*
 crash.log
+ignore.tf
 override.tf
 override.tf.json
 *_override.tf

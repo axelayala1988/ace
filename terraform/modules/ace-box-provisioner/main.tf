@@ -62,6 +62,7 @@ locals {
     "ACE_CA_TENANT=${local.ca_tenant}",
     "ACE_CA_API_TOKEN=${local.ca_api_token}",
     "ACE_HOST_GROUP=${local.host_group}",
+    "ACE_HOST_IP=${local.host}",
     "ace prepare --force"
   ]
   ace_extra_vars = [
