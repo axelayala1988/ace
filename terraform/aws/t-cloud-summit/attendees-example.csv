@@ -1,0 +1,2 @@
+attendee_id,subnet_id,ingress_domain
+attendee-1,<your AWS subnet ID>,attendee-1.ace-innovation.info
