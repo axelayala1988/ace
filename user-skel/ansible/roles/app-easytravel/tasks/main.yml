@@ -5,7 +5,7 @@
     release_namespace: "{{ easytravel_namespace }}"
     create_namespace: true
     wait: true
-    wait_timeout: 10m
+    wait_timeout: 25m
     values:
       config:
         ingress:

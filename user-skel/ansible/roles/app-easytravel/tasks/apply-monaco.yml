@@ -17,7 +17,8 @@
         INGRESS_DOMAIN: "{{ ingress_domain }}"
         SYNTH_NODE_ID: "{{ dt_synthetic_node_id }}"
         APP_NAMESPACE: "{{ easytravel_namespace }}"
-        INCL_SYNTH: "false"
+        SKIP_SYNTH_DEPLOY: "true"
+        HOST_GROUP_NAME: "{{ host_group }}"
   vars:
     monaco_project: "easytravel"
     monaco_projects_root: "{{ monaco_projects_folder }}" 

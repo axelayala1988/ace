@@ -3,7 +3,7 @@ config:
     - app-easytravel-angular-prod: "easytravel-angular.json"
   
 app-easytravel-prod:
-    - name: "app.easytravel.prod"
+    - name: "app.easytravel.{{ .Env.HOST_GROUP_NAME }}"
 
 app-easytravel-angular-prod:
-    - name: "app.easytravel-angular.prod"
+    - name: "app.easytravel-angular.{{ .Env.HOST_GROUP_NAME }}"

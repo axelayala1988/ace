@@ -5,29 +5,31 @@ config:
     - browser-easytravel-angular-prod-home: "easytravel-browser-monitor.json"
   
 health-easytravel-prod:
-    - name: "webcheck.easytravel.prod"
+    - name: "webcheck.easytravel.{{ .Env.HOST_GROUP_NAME }}"
     - url: "http://easytravel.{{ .Env.INGRESS_DOMAIN }}"
-    - description: "Health Check for easytravel in prod"
+    - description: "Health Check for easytravel in {{ .Env.HOST_GROUP_NAME }}"
     - location: "/infrastructure/synthetic-location/acebox.id"
     - managementZoneId: "/easytravel/management-zone/management-zone-easytravel.id"
     - tag: "/easytravel/auto-tag/tagging-easytravel-prod.name"
     - applicationId: "/easytravel/application-web/app-easytravel-prod.id"
     - frequencyInMin: "1"
     - enabled: "true"
+    - skipDeployment: "{{ .Env.SKIP_SYNTH_DEPLOY }}"
 
 health-easytravel-angular-prod:
-    - name: "webcheck.easytravel-angular.prod"
+    - name: "webcheck.easytravel-angular.{{ .Env.HOST_GROUP_NAME }}"
     - url: "http://easytravel-angular.{{ .Env.INGRESS_DOMAIN }}"
-    - description: "Health Check for easytravel-angular in prod"
+    - description: "Health Check for easytravel-angular in {{ .Env.HOST_GROUP_NAME }}"
     - location: "/infrastructure/synthetic-location/acebox.id"
     - managementZoneId: "/easytravel/management-zone/management-zone-easytravel.id"
     - tag: "/easytravel/auto-tag/tagging-easytravel-prod.name"
     - applicationId: "/easytravel/application-web/app-easytravel-angular-prod.id"
     - frequencyInMin: "1"
     - enabled: "true"
+    - skipDeployment: "{{ .Env.SKIP_SYNTH_DEPLOY }}"
 
 browser-easytravel-prod-home:
-    - name: "browser.easytravel.prod.home"
+    - name: "browser.easytravel.{{ .Env.HOST_GROUP_NAME }}.home"
     - url: "http://easytravel.{{ .Env.INGRESS_DOMAIN }}"
     - description: "Browser check for Easytravel Home Page"
     - location: "/infrastructure/synthetic-location/acebox.id"
@@ -36,9 +38,10 @@ browser-easytravel-prod-home:
     - applicationId: "/easytravel/application-web/app-easytravel-prod.id"
     - frequencyInMin: "5"
     - enabled: "true"
+    - skipDeployment: "{{ .Env.SKIP_SYNTH_DEPLOY }}"
 
 browser-easytravel-angular-prod-home:
-    - name: "browser.easytravel-angular.prod.home"
+    - name: "browser.easytravel-angular.{{ .Env.HOST_GROUP_NAME }}.home"
     - url: "http://easytravel-angular.{{ .Env.INGRESS_DOMAIN }}"
     - description: "Browser check for Easytravel Angular Home Page"
     - location: "/infrastructure/synthetic-location/acebox.id"
@@ -47,3 +50,4 @@ browser-easytravel-angular-prod-home:
     - applicationId: "/easytravel/application-web/app-easytravel-angular-prod.id"
     - frequencyInMin: "5"
     - enabled: "true"
+    - skipDeployment: "{{ .Env.SKIP_SYNTH_DEPLOY }}"
