@@ -1,2 +1,2 @@
-attendee_id,subnet_id,ingress_domain
-attendee-1,<your AWS subnet ID>,attendee-1.ace-innovation.info
+attendee_id,ingress_domain,use_case
+attendee-1,attendee-1.ace-innovation.info,https://github.com/dynatrace-ace/ace-box-sandbox-easytravel.git

@@ -67,20 +67,9 @@ variable "ca_api_token" {
   default     = ""
 }
 
-variable "use_case" {
-  type        = string
-  description = "Use cases the ACE-Box will be enabled for."
-  default     = "demo_default"
-}
-
 variable "extra_vars" {
   type    = map(string)
   default = {}
-}
-
-variable "security_group_ids" {
-  type    = list(string)
-  default = []
 }
 
 variable "attendee_configs_csv_path" {

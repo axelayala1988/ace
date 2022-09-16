@@ -5,6 +5,8 @@ locals {
   attendee_configs_csv_file = file(var.attendee_configs_csv_path)
   attendee_configs          = csvdecode(local.attendee_configs_csv_file)
   number_attendees          = length(local.attendee_configs)
+  vpc_cidr                  = "10.0.0.0/16"
+  vpc_subnet_cidrs          = cidrsubnets(local.vpc_cidr, 2)
 }
 
 # 
@@ -31,14 +33,59 @@ resource "aws_key_pair" "generated_key" {
   public_key = module.ssh_key.public_key_openssh
 }
 
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "3.14.4"
+
+  name           = "acebox-vpc-${random_id.ace_box.hex}"
+  cidr           = local.vpc_cidr
+  azs            = data.aws_availability_zones.available.names
+  public_subnets = local.vpc_subnet_cidrs
+
+  tags = {
+    Terraform  = "true"
+    GithubRepo = "ace-box"
+    GithubOrg  = "dynatrace"
+  }
+}
+
+# resource "aws_eip" "acebox_eip" {
+#   vpc               = true
+#   network_interface = aws_network_interface.acebox_nic.id
+#   depends_on        = [module.vpc]
+# }
+
+module "security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.13.0"
+
+  name        = "ace-box-sg-${random_id.ace_box.hex}"
+  description = "Security group for ace-box"
+  vpc_id      = module.vpc.vpc_id
+
+  egress_rules = ["all-all"]
+
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules       = ["http-80-tcp", "https-443-tcp", "ssh-tcp"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 16443
+      to_port     = 16443
+      protocol    = "tcp"
+      description = "Kubernetes API"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+}
+
 # 
 # Network interface
 # 
 resource "aws_network_interface" "acebox" {
   count = local.number_attendees
 
-  subnet_id       = local.attendee_configs[count.index].subnet_id
-  security_groups = var.security_group_ids
+  subnet_id       = element(module.vpc.public_subnets, length(module.vpc.public_subnets) - 1)
+  security_groups = [module.security_group.security_group_id]
 
   tags = {
     Name = "acebox-${random_id.instance_id[count.index].hex}"
@@ -87,6 +134,17 @@ locals {
   dashboards_by_attendees = {
     for k, attendee in local.attendee_configs : attendee.attendee_id => "${var.ingress_protocol}://dashboard.${attendee.ingress_domain}"
   }
+  records = [
+    for k, attendee in local.attendee_configs : "*.${attendee.ingress_domain} 0s A ${aws_instance.acebox[k].public_ip}"
+  ]
+  zone_file = <<-EOT
+  ${join("\n", local.records)}
+  EOT
+}
+
+resource "local_file" "zone_file" {
+  content  = local.zone_file
+  filename = "${path.module}/zone_file.txt"
 }
 
 #
@@ -107,6 +165,6 @@ module "provisioner" {
   dt_paas_token    = var.dt_paas_token
   ca_tenant        = var.ca_tenant
   ca_api_token     = var.ca_api_token
-  use_case         = var.use_case
+  use_case         = local.attendee_configs[count.index].use_case
   extra_vars       = var.extra_vars
 }

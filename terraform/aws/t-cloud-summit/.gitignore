@@ -1,0 +1,9 @@
+# Include terraform vars example
+!terraform-example.tfvars
+
+# Include attendees example
+*.csv
+!attendees-example.csv
+
+# DNS zone files
+zone_file.txt
