@@ -41,6 +41,7 @@ resource "null_resource" "provisioner_init" {
 
   provisioner "remote-exec" {
     inline = [
+      "cloud-init status --wait",
       "sed -i 's/\r$//' /home/${local.user}/init.sh",
       "chmod +x /home/${local.user}/init.sh",
       "export ACE_BOX_USER=${local.user}",
