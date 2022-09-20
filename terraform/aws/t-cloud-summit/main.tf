@@ -78,19 +78,12 @@ module "security_group" {
       cidr_blocks = "0.0.0.0/0"
     },
     {
-      from_port   = 8094
-      to_port     = 8094
+      from_port   = 8080
+      to_port     = 8080
       protocol    = "tcp"
       description = "Easytravel Config UI"
       cidr_blocks = "0.0.0.0/0"
-    },
-    {
-      from_port   = 8079
-      to_port     = 8079
-      protocol    = "tcp"
-      description = "Easytravel"
-      cidr_blocks = "0.0.0.0/0"
-    },
+    }
   ]
 }
 
@@ -141,6 +134,9 @@ locals {
   public_ips_by_attendees = {
     for k, attendee in local.attendee_configs : attendee.attendee_id => aws_instance.acebox[k].public_ip
   }
+  private_ips_by_attendees = {
+    for k, attendee in local.attendee_configs : attendee.attendee_id => aws_instance.acebox[k].private_ip
+  }
   public_ips_by_ingress_domains = {
     for k, attendee in local.attendee_configs : attendee.ingress_domain => aws_instance.acebox[k].public_ip
   }
@@ -170,7 +166,7 @@ module "provisioner" {
   count  = local.number_attendees
   source = "../../modules/ace-box-provisioner"
 
-  host             = aws_instance.acebox[count.index].public_ip
+  host             = aws_instance.acebox[count.index].private_ip
   host_group       = local.attendee_configs[count.index].attendee_id
   user             = var.acebox_user
   private_key      = module.ssh_key.private_key_pem
