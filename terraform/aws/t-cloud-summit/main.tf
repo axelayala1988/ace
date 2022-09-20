@@ -9,6 +9,12 @@ locals {
   vpc_subnet_cidrs          = cidrsubnets(local.vpc_cidr, 2)
 }
 
+locals {
+  is_custom_vpc = var.subnet_id != "" && var.vpc_id != ""
+  public_subnet = local.is_custom_vpc ? var.subnet_id : element(module.vpc[0].public_subnets, length(module.vpc[0].public_subnets) - 1)
+  vpc_id        = local.is_custom_vpc ? var.vpc_id : module.vpc[0].vpc_id
+}
+
 # 
 # Randomization
 # 
@@ -34,6 +40,8 @@ resource "aws_key_pair" "generated_key" {
 }
 
 module "vpc" {
+  count = local.is_custom_vpc ? 0 : 1
+
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.14.4"
 
@@ -49,19 +57,13 @@ module "vpc" {
   }
 }
 
-# resource "aws_eip" "acebox_eip" {
-#   vpc               = true
-#   network_interface = aws_network_interface.acebox_nic.id
-#   depends_on        = [module.vpc]
-# }
-
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.13.0"
 
   name        = "ace-box-sg-${random_id.ace_box.hex}"
   description = "Security group for ace-box"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = local.vpc_id
 
   egress_rules = ["all-all"]
 
@@ -75,6 +77,20 @@ module "security_group" {
       description = "Kubernetes API"
       cidr_blocks = "0.0.0.0/0"
     },
+    {
+      from_port   = 8094
+      to_port     = 8094
+      protocol    = "tcp"
+      description = "Easytravel Config UI"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 8079
+      to_port     = 8079
+      protocol    = "tcp"
+      description = "Easytravel"
+      cidr_blocks = "0.0.0.0/0"
+    },
   ]
 }
 
@@ -84,7 +100,7 @@ module "security_group" {
 resource "aws_network_interface" "acebox" {
   count = local.number_attendees
 
-  subnet_id       = element(module.vpc.public_subnets, length(module.vpc.public_subnets) - 1)
+  subnet_id       = local.public_subnet
   security_groups = [module.security_group.security_group_id]
 
   tags = {
