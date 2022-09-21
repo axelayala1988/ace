@@ -147,7 +147,7 @@ locals {
     for k, attendee in local.attendee_configs : attendee.attendee_id => "${var.ingress_protocol}://dashboard.${attendee.ingress_domain}"
   }
   records = [
-    for k, attendee in local.attendee_configs : "*.${attendee.ingress_domain} 0s A ${aws_instance.acebox[k].public_ip}"
+    for k, attendee in local.attendee_configs : "*.${attendee.ingress_domain} 0s A ${aws_instance.acebox[k].public_ip}\n${attendee.ingress_domain} 0s A ${aws_instance.acebox[k].public_ip}"
   ]
   zone_file = <<-EOT
   ${join("\n", local.records)}
