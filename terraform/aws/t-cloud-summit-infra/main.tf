@@ -27,7 +27,7 @@ resource "aws_key_pair" "generated_key" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.14.4"
+  version = "3.14.2"
 
   name           = "acebox-vpc-${random_id.ace_box.hex}"
   cidr           = local.vpc_cidr
