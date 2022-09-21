@@ -10,11 +10,6 @@ variable "ubuntu_image" {
   default = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
 }
 
-variable "name_prefix" {
-  description = "Prefix to distinguish the instance"
-  default     = "ace-box-cloud"
-}
-
 variable "acebox_user" {
   description = "Initial user when ace-box is created"
   default     = "ubuntu"

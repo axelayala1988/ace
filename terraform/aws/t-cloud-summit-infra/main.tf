@@ -127,28 +127,6 @@ resource "aws_instance" "acebox" {
 
   tags = {
     Terraform = "true"
-    Name      = "${var.name_prefix}-${random_id.ace_box.hex}"
-  }
-
-  lifecycle {
-    ignore_changes = [tags]
+    Name      = "ace-box-bastion-${random_id.ace_box.hex}"
   }
 }
-
-# resource "null_resource" "provisioner_init" {
-#   connection {
-#     host        = aws_instance.acebox.public_ip
-#     type        = "ssh"
-#     user        = var.acebox_user
-#     private_key = module.ssh_key.private_key_pem
-#   }
-
-#   depends_on = [aws_instance.acebox]
-
-#   provisioner "remote-exec" {
-#     inline = [
-#       "cloud-init status --wait",
-#       "sudo snap install terraform --classic"
-#     ]
-#   }
-# }
