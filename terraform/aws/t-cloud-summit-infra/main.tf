@@ -135,20 +135,20 @@ resource "aws_instance" "acebox" {
   }
 }
 
-resource "null_resource" "provisioner_init" {
-  connection {
-    host        = aws_instance.acebox.public_ip
-    type        = "ssh"
-    user        = var.acebox_user
-    private_key = module.ssh_key.private_key_pem
-  }
+# resource "null_resource" "provisioner_init" {
+#   connection {
+#     host        = aws_instance.acebox.public_ip
+#     type        = "ssh"
+#     user        = var.acebox_user
+#     private_key = module.ssh_key.private_key_pem
+#   }
 
-  depends_on = [aws_instance.acebox]
+#   depends_on = [aws_instance.acebox]
 
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait",
-      "sudo snap install terraform --classic"
-    ]
-  }
-}
+#   provisioner "remote-exec" {
+#     inline = [
+#       "cloud-init status --wait",
+#       "sudo snap install terraform --classic"
+#     ]
+#   }
+# }
