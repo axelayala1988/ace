@@ -167,6 +167,7 @@ module "provisioner" {
   source = "../../modules/ace-box-provisioner"
 
   host             = aws_instance.acebox[count.index].private_ip
+  host_public_ip   = aws_instance.acebox[count.index].public_ip
   host_group       = local.attendee_configs[count.index].attendee_id
   user             = var.acebox_user
   private_key      = module.ssh_key.private_key_pem

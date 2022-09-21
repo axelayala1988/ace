@@ -2,6 +2,10 @@ variable "host" {
 
 }
 
+variable "host_public_ip" {
+
+}
+
 variable "user" {
 
 }
