@@ -32,3 +32,21 @@ Variables that can be set are as follows:
 unguard_namespace: "unguard" # namespace that Unguard will be deployed in
 unguard_image_tag: "0.0.1" #image tag to deploy for all Unguard images
 ```
+
+### Configure Dynatrace using Monaco
+
+> Note: the below configures Dynatrace with the monaco project embedded in the role
+
+```yaml
+- include_role:
+    name: app-unguard
+    tasks_from: apply-monaco
+```
+
+To delete the configuration again:
+
+```yaml
+- include_role:
+    name: app-unguard
+    tasks_from: delete-monaco
+```
