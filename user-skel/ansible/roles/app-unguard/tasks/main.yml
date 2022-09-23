@@ -18,7 +18,7 @@
 - name: Deploy Unguard
   kubernetes.core.helm:
     name: unguard
-    chart_ref: "{{ role_path }}/files/helm/unguard"
+    chart_ref: "{{ role_path }}/files/repos/unguard/helm/unguard"
     release_namespace: "{{ unguard_namespace }}"
     create_namespace: true
     wait: true
