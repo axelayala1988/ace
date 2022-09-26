@@ -69,12 +69,10 @@ variable "ca_api_token" {
 
 variable "vpc_id" {
   description = "If vpc_id and subnet_id are set, referenced VPC will be used instead of a new one created by module"
-  default     = ""
 }
 
 variable "subnet_id" {
   description = "If vpc_id and subnet_id are set, referenced VPC will be used instead of a new one created by module"
-  default     = ""
 }
 
 variable "extra_vars" {
