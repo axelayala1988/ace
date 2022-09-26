@@ -1,4 +1,5 @@
 config:
-  - unguard: unguard.json
-unguard:
+  - unguard: management-zone.json
+
+unguard-management-zone:
   - name: unguard

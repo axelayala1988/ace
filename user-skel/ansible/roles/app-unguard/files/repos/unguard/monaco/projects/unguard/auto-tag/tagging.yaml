@@ -1,0 +1,6 @@
+config:
+    - tagging-unguard: "tagging.json"
+  
+tagging-unguard:
+    - name: "unguard"
+    - namespace: "{{ .Env.APP_NAMESPACE }}"
